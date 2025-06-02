@@ -65,6 +65,13 @@ const Payments = () => {
     'FRAX'
   ];
 
+  // Blockchains that require memo fields
+  const blockchainsRequiringMemo = ['Stellar', 'Cosmos', 'Algorand'];
+
+  // Check if the selected destination blockchain requires a memo
+  const shouldShowMemo = paymentType === 'crypto-to-crypto' && 
+    blockchainsRequiringMemo.includes(destinationPaymentRail);
+
   const payments = [
     {
       date: 'Jun 1, 2025',
@@ -407,18 +414,20 @@ const Payments = () => {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="memo" className="text-base font-medium">
-                    Memo
-                  </Label>
-                  <Input
-                    id="memo"
-                    placeholder="Memo for Stellar transfer"
-                    value={memo}
-                    onChange={(e) => setMemo(e.target.value)}
-                    className="w-full"
-                  />
-                </div>
+                {shouldShowMemo && (
+                  <div className="space-y-2">
+                    <Label htmlFor="memo" className="text-base font-medium">
+                      Memo
+                    </Label>
+                    <Input
+                      id="memo"
+                      placeholder="Optional"
+                      value={memo}
+                      onChange={(e) => setMemo(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                )}
               </>
             ) : (
               // On-ramp/Off-ramp fields
