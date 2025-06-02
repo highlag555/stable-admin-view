@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Customers from "./pages/Customers";
+import CustomerDetail from "./pages/CustomerDetail";
 import Payments from "./pages/Payments";
 import ApiKeys from "./pages/ApiKeys";
 import Team from "./pages/Team";
@@ -24,6 +25,7 @@ const App = () => (
           <Navigation />
           <Routes>
             <Route path="/" element={<Customers />} />
+            <Route path="/customer/:id" element={<CustomerDetail />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/api-keys" element={<ApiKeys />} />
             <Route path="/team" element={<Team />} />

@@ -1,19 +1,20 @@
 
 import { Search, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
 
 const Customers = () => {
   const customers = [
-    { name: 'Ya-Chen Huang', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
-    { name: 'Hakim Hettak', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
-    { name: 'Karensa Fisher', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
-    { name: 'Ciro Felipe Rincon Yepez', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
-    { name: 'Simon Sibiya', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
-    { name: 'Abhishek Singh', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
-    { name: 'Ayasy El Qodri', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
-    { name: 'Wan Zulazmi', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
-    { name: 'Ranjani Prasad', dateAdded: '06/01/25', type: 'Individual', status: 'Active' as const, tasks: null },
-    { name: 'Farjana Akter', dateAdded: '06/01/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
+    { id: '1', name: 'Ya-Chen Huang', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
+    { id: '2', name: 'Hakim Hettak', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
+    { id: '3', name: 'Karensa Fisher', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
+    { id: '4', name: 'Ciro Felipe Rincon Yepez', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
+    { id: '5', name: 'Simon Sibiya', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
+    { id: '6', name: 'Abhishek Singh', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
+    { id: '7', name: 'Ayasy El Qodri', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
+    { id: '8', name: 'Wan Zulazmi', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
+    { id: '9', name: 'Ranjani Prasad', dateAdded: '06/01/25', type: 'Individual', status: 'Active' as const, tasks: null },
+    { id: '10', name: 'Farjana Akter', dateAdded: '06/01/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
   ];
 
   return (
@@ -61,9 +62,16 @@ const Customers = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {customers.map((customer, index) => (
-              <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{customer.name}</td>
+            {customers.map((customer) => (
+              <tr key={customer.id} className="hover:bg-gray-50 transition-colors duration-150">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <Link 
+                    to={`/customer/${customer.id}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {customer.name}
+                  </Link>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.dateAdded}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.type}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
