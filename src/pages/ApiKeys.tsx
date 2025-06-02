@@ -1,4 +1,3 @@
-
 import { Plus, Trash2, Copy, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -261,7 +260,8 @@ const ApiKeys = () => {
       <div className="flex justify-end mb-4">
         <Button 
           onClick={() => generateApiKey(activeTab)} 
-          className="bg-gray-800 hover:bg-gray-700"
+          className="text-white"
+          style={{ backgroundColor: '#4941EC' }}
         >
           <Plus className="w-4 h-4 mr-2" />
           Generate {activeTab === 'production' ? 'Production' : 'Sandbox'} Key

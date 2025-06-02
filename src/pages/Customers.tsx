@@ -77,7 +77,8 @@ const Customers = () => {
         <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
         <button 
           onClick={() => setIsCreateModalOpen(true)}
-          className="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200"
+          className="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200"
+          style={{ backgroundColor: '#4941EC' }}
         >
           <Plus className="w-4 h-4 mr-2" />
           Create customer
@@ -245,7 +246,8 @@ const Customers = () => {
               <Button
                 onClick={handleCreateCustomer}
                 disabled={!customerName || !customerEmail}
-                className="flex-1 bg-black hover:bg-gray-800 text-white"
+                className="flex-1 text-white"
+                style={{ backgroundColor: '#4941EC' }}
               >
                 Create customer
               </Button>

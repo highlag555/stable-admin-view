@@ -1,4 +1,3 @@
-
 import { Plus, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -157,7 +156,7 @@ const Team = () => {
         
         <Dialog open={isInviteOpen} onOpenChange={setIsInviteOpen}>
           <DialogTrigger asChild>
-            <Button className="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200">
+            <Button className="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-md transition-colors duration-200" style={{ backgroundColor: '#4941EC' }}>
               Invite member
             </Button>
           </DialogTrigger>
@@ -190,7 +189,8 @@ const Team = () => {
               </Button>
               <Button 
                 onClick={handleInvite}
-                className="px-6 bg-black text-white hover:bg-gray-800"
+                className="px-6 text-white"
+                style={{ backgroundColor: '#4941EC' }}
               >
                 Invite
               </Button>
