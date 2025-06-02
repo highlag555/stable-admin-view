@@ -1,4 +1,3 @@
-
 import { Plus, Trash2, Copy, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 
 interface ApiKey {
@@ -13,6 +13,7 @@ interface ApiKey {
   key: string;
   created: string;
   isVisible?: boolean;
+  type: 'sandbox' | 'production';
 }
 
 const ApiKeys = () => {
@@ -20,18 +21,18 @@ const ApiKeys = () => {
     {
       id: '1',
       key: 'sk-live●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●348e',
-      created: '24/09/2024, 21:23:33'
+      created: '24/09/2024, 21:23:33',
+      type: 'production'
     }
   ]);
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [newGeneratedKey, setNewGeneratedKey] = useState<string>('');
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
-  const [isSandbox, setIsSandbox] = useState(false);
+  const [activeTab, setActiveTab] = useState<'sandbox' | 'production'>('production');
   const { toast } = useToast();
 
-  const generateApiKey = () => {
-    // Generate a random API key
-    const prefix = isSandbox ? 'sk-test-' : 'sk-live-';
+  const generateApiKey = (type: 'sandbox' | 'production') => {
+    const prefix = type === 'sandbox' ? 'sk-test-' : 'sk-live-';
     const randomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const newKey = prefix + randomString;
     
@@ -46,7 +47,8 @@ const ApiKeys = () => {
         minute: '2-digit',
         second: '2-digit'
       }).replace(',', ','),
-      isVisible: true
+      isVisible: true,
+      type: type
     };
 
     setApiKeys(prev => [newApiKey, ...prev]);
@@ -55,7 +57,7 @@ const ApiKeys = () => {
 
     toast({
       title: "API Key Generated",
-      description: "Your new API key has been generated successfully.",
+      description: `Your new ${type} API key has been generated successfully.`,
     });
   };
 
@@ -100,49 +102,27 @@ const ApiKeys = () => {
     return prefix + maskedMiddle + suffix;
   };
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">API Keys</h1>
-        <Button onClick={generateApiKey} className="bg-gray-800 hover:bg-gray-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Generate Key
-        </Button>
-      </div>
+  const filteredKeys = apiKeys.filter(key => key.type === activeTab);
 
-      <div className="mb-6">
-        <p className="text-gray-600 text-sm">
-          Your keys will allow you to authenticate API requests. A maximum of two keys can be used at the same time.{' '}
-          <a href="#" className="text-blue-600 hover:text-blue-800">More Info</a>
-        </p>
-      </div>
-
-      <div className="flex justify-end mb-4">
-        <div className="flex items-center">
-          <span className="text-sm text-gray-500 mr-2">Sandbox</span>
-          <div className="relative inline-block w-10 mr-2 align-middle select-none">
-            <input 
-              type="checkbox" 
-              checked={isSandbox}
-              onChange={(e) => setIsSandbox(e.target.checked)}
-              className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
-            />
-            <label className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+  const renderApiKeysTable = (keys: ApiKey[]) => (
+    <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {keys.length === 0 ? (
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
+                No {activeTab} API keys found. Generate one to get started.
+              </td>
             </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {apiKeys.map((apiKey) => (
+          ) : (
+            keys.map((apiKey) => (
               <tr key={apiKey.id} className="hover:bg-gray-50 transition-colors duration-150">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center space-x-2">
@@ -216,10 +196,87 @@ const ApiKeys = () => {
                   </AlertDialog>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">API Keys</h1>
       </div>
+
+      <div className="mb-6">
+        <p className="text-gray-600 text-sm">
+          Your keys will allow you to authenticate API requests. A maximum of two keys can be used at the same time.{' '}
+          <a href="#" className="text-blue-600 hover:text-blue-800">More Info</a>
+        </p>
+      </div>
+
+      {/* Environment Toggle */}
+      <div className="flex items-center justify-center mb-8">
+        <div className="flex items-center space-x-4 bg-gray-100 rounded-lg p-1">
+          <button
+            onClick={() => setActiveTab('production')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'production'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Production
+          </button>
+          <button
+            onClick={() => setActiveTab('sandbox')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'sandbox'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Sandbox
+          </button>
+        </div>
+      </div>
+
+      {/* Environment Info */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="flex items-start">
+          <div className="flex-shrink-0">
+            <div className={`w-3 h-3 rounded-full mt-1 ${
+              activeTab === 'production' ? 'bg-green-500' : 'bg-yellow-500'
+            }`}></div>
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-blue-800">
+              {activeTab === 'production' ? 'Production Environment' : 'Sandbox Environment'}
+            </h3>
+            <p className="mt-1 text-sm text-blue-700">
+              {activeTab === 'production' 
+                ? 'Keys in this environment will process real transactions and charges.'
+                : 'Keys in this environment are for testing purposes and will not process real transactions.'
+              }
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Generate Key Button */}
+      <div className="flex justify-end mb-4">
+        <Button 
+          onClick={() => generateApiKey(activeTab)} 
+          className="bg-gray-800 hover:bg-gray-700"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Generate {activeTab === 'production' ? 'Production' : 'Sandbox'} Key
+        </Button>
+      </div>
+
+      {/* API Keys Table */}
+      {renderApiKeysTable(filteredKeys)}
 
       {/* Generate Key Success Modal */}
       <Dialog open={isGenerateModalOpen} onOpenChange={setIsGenerateModalOpen}>
