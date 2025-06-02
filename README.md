@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Welcome to the Stables Dev dashboard project
 
 ## Project info
 
