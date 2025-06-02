@@ -1,9 +1,19 @@
-
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import StatusBadge from '../components/StatusBadge';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
 
 const Customers = () => {
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const customers = [
     { id: '1', name: 'Ya-Chen Huang', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
     { id: '2', name: 'Hakim Hettak', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
@@ -16,6 +26,11 @@ const Customers = () => {
     { id: '9', name: 'Ranjani Prasad', dateAdded: '06/01/25', type: 'Individual', status: 'Active' as const, tasks: null },
     { id: '10', name: 'Farjana Akter', dateAdded: '06/01/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
   ];
+
+  const handleTaskClick = (customer: any) => {
+    setSelectedCustomer(customer);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -80,8 +95,12 @@ const Customers = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {customer.tasks && (
                     <div className="flex items-center">
-                      <span className="text-yellow-600 font-medium">{customer.tasks}</span>
-                      <span className="ml-1 text-yellow-500">⭐</span>
+                      <span className="text-yellow-600 font-medium mr-2">{customer.tasks}</span>
+                      <button
+                        onClick={() => handleTaskClick(customer)}
+                        className="w-2 h-2 bg-yellow-500 rounded-full hover:bg-yellow-600 transition-colors cursor-pointer"
+                        title="View verification tasks"
+                      ></button>
                     </div>
                   )}
                 </td>
@@ -95,6 +114,44 @@ const Customers = () => {
         <button className="text-gray-400 text-sm">← Previous</button>
         <button className="text-gray-900 text-sm font-medium">Next →</button>
       </div>
+
+      {/* Tasks Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Info className="w-5 h-5 text-yellow-600" />
+              Tasks blocking approval
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-orange-100 rounded flex items-center justify-center flex-shrink-0">
+                  <Info className="w-4 h-4 text-orange-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900 mb-1">Add customer details</div>
+                  <div className="text-sm text-gray-600 mb-3">
+                    Required information needed for US and SEPA verification
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      Start task
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      Copy link
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="text-xs text-gray-500">
+              Complete these tasks to enable feature access for {selectedCustomer?.name}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
