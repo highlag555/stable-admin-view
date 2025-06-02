@@ -1,4 +1,3 @@
-
 import { Search, Plus } from 'lucide-react';
 import { useState } from 'react';
 import StatusBadge from '../components/StatusBadge';
@@ -66,12 +65,39 @@ const Payments = () => {
     'FRAX'
   ];
 
+  const globalCurrencies = [
+    'USD',
+    'EUR',
+    'GBP',
+    'JPY',
+    'AUD',
+    'CAD',
+    'CHF',
+    'CNY',
+    'SEK',
+    'NZD',
+    'MXN',
+    'SGD',
+    'HKD',
+    'NOK',
+    'TRY',
+    'ZAR',
+    'BRL',
+    'INR',
+    'KRW',
+    'PLN'
+  ];
+
   // Blockchains that require memo fields
   const blockchainsRequiringMemo = ['Stellar', 'Cosmos', 'Algorand'];
 
   // Check if the selected destination blockchain requires a memo
   const shouldShowMemo = paymentType === 'crypto-to-crypto' && 
     blockchainsRequiringMemo.includes(destinationPaymentRail);
+
+  // Check if we should show global currencies for source currency
+  const shouldShowGlobalCurrencies = (paymentType === 'on-ramp' || paymentType === 'off-ramp') && 
+    ['bank-transfer', 'card', 'mobile-wallet'].includes(sourcePaymentRail);
 
   const payments = [
     {
@@ -458,11 +484,19 @@ const Payments = () => {
                         <SelectValue placeholder="Select currency" />
                       </SelectTrigger>
                       <SelectContent>
-                        {topStablecoins.map((coin) => (
-                          <SelectItem key={coin} value={coin}>
-                            {coin}
-                          </SelectItem>
-                        ))}
+                        {shouldShowGlobalCurrencies ? (
+                          globalCurrencies.map((currency) => (
+                            <SelectItem key={currency} value={currency}>
+                              {currency}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          topStablecoins.map((coin) => (
+                            <SelectItem key={coin} value={coin}>
+                              {coin}
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
