@@ -30,6 +30,7 @@ import {
 const Payments = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState('history');
   const [paymentType, setPaymentType] = useState<string>('');
   const [customerId, setCustomerId] = useState('');
   const [sourcePaymentRail, setSourcePaymentRail] = useState('');
@@ -164,15 +165,84 @@ const Payments = () => {
     }
   ];
 
+  const liquidationAddresses = [
+    {
+      date: 'Jan 21, 2025',
+      customer: 'Stables Europe Spolka z ograniczona Odpowiedzialnoscia',
+      email: 'team@stables.money',
+      id: '69661421-b545-4a34-9a01-fffe68d828e0',
+      status: 'active' as const,
+      asset: 'USDC on Polygon',
+      bankName: 'UNICREDIT SPA',
+      accountInfo: '****0973',
+      payoutMethod: 'Sepa',
+      address: '0x938e9e4b586726cc380e6bcd00ab3e64a83d331b'
+    },
+    {
+      date: 'Dec 10, 2024',
+      customer: 'Stables.Money',
+      email: 'bernardo@stables.money',
+      id: 'bd9c9663-9228-41b1-9b25-762de72199a7',
+      status: 'active' as const,
+      asset: 'USDC on Polygon',
+      bankName: 'Community Federal Savings Bank',
+      accountInfo: '****8065',
+      payoutMethod: 'ACH',
+      address: '0xd82f2fe54a38cb1a35eb3cb6e309445e6323d2b1'
+    },
+    {
+      date: 'Dec 10, 2024',
+      customer: 'Stables.Money',
+      email: 'bernardo@stables.money',
+      id: 'bd9c9663-9228-41b1-9b25-762de72199a7',
+      status: 'active' as const,
+      asset: 'USDC on Ethereum',
+      bankName: 'Community Federal Savings Bank',
+      accountInfo: '****8065',
+      payoutMethod: 'ACH',
+      address: '0x627c214c26a316e3cbfa76cd04f156623f97bf64'
+    },
+    {
+      date: 'Nov 4, 2024',
+      customer: 'Stables.Money',
+      email: 'bernardo@stables.money',
+      id: 'bd9c9663-9228-41b1-9b25-762de72199a7',
+      status: 'active' as const,
+      asset: 'USDT on Ethereum',
+      bankName: 'Polygon Address: 0x...4ab5',
+      accountInfo: '',
+      payoutMethod: 'Polygon',
+      address: '0xba418a7ebfe1c3fa76633855ec3333d2764f61da'
+    },
+    {
+      date: 'Oct 28, 2024',
+      customer: 'Stables.Money',
+      email: 'bernardo@stables.money',
+      id: 'bd9c9663-9228-41b1-9b25-762de72199a7',
+      status: 'active' as const,
+      asset: 'USDC on Solana',
+      bankName: 'Choice Financial Group',
+      accountInfo: '****6179',
+      payoutMethod: 'ACH',
+      address: '61f1xqGLYha4e1TaYo5xL3XsBbWmAzteHNv7okdKvfsh'
+    }
+  ];
+
   // Pagination logic
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(payments.length / itemsPerPage);
+  const currentData = activeTab === 'history' ? payments : liquidationAddresses;
+  const totalPages = Math.ceil(currentData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentPayments = payments.slice(startIndex, endIndex);
+  const currentItems = currentData.slice(startIndex, endIndex);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Reset to first page when switching tabs
   };
 
   const handleCreatePayment = () => {
@@ -241,8 +311,26 @@ const Payments = () => {
       </div>
 
       <div className="flex space-x-6 mb-6">
-        <button className="text-blue-600 border-b-2 border-blue-600 pb-2 text-sm font-medium">History</button>
-        <button className="text-gray-500 pb-2 text-sm hover:text-gray-700">Liquidation Addresses</button>
+        <button 
+          onClick={() => handleTabChange('history')}
+          className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'history' 
+              ? 'text-blue-600 border-blue-600' 
+              : 'text-gray-500 border-transparent hover:text-gray-700'
+          }`}
+        >
+          History
+        </button>
+        <button 
+          onClick={() => handleTabChange('liquidation')}
+          className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'liquidation' 
+              ? 'text-blue-600 border-blue-600' 
+              : 'text-gray-500 border-transparent hover:text-gray-700'
+          }`}
+        >
+          Liquidation Addresses
+        </button>
       </div>
 
       <div className="mb-6">
@@ -250,63 +338,143 @@ const Payments = () => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
             type="text"
-            placeholder="Search all transactions..."
+            placeholder={activeTab === 'history' ? "Search all transactions..." : "Search all liquidation addresses..."}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
       </div>
 
       <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conversion</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank Details</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {currentPayments.map((payment, index) => (
-              <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{payment.date}</td>
-                <td className="px-6 py-4">
-                  <div>
-                    <div className="text-sm font-medium text-gray-900">{payment.customer}</div>
-                    <div className="text-sm text-gray-500">{payment.email}</div>
-                    <div className="text-xs text-gray-400 font-mono">{payment.id}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <StatusBadge status={payment.status} />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{payment.amount}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payment.type}</td>
-                <td className="px-6 py-4">
-                  <div>
-                    <div className="text-xs text-gray-500">Transaction ID:</div>
-                    <div className="text-xs font-mono text-gray-600">{payment.transactionId}</div>
-                    <div className="text-xs text-gray-500 mt-1">Currency:</div>
-                    <div className="text-xs text-gray-600">{payment.currency}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div>
-                    <div className="text-xs text-gray-500">Bank name:</div>
-                    <div className="text-xs text-gray-600">{payment.bankName}</div>
-                    <div className="text-xs text-gray-400 mt-1">{payment.accountInfo}</div>
-                  </div>
-                </td>
+        {activeTab === 'history' ? (
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conversion</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank Details</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentItems.map((payment, index) => (
+                <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{payment.date}</td>
+                  <td className="px-6 py-4">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{payment.customer}</div>
+                      <div className="text-sm text-gray-500">{payment.email}</div>
+                      <div className="text-xs text-gray-400 font-mono">{payment.id}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <StatusBadge status={payment.status} />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{payment.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payment.type}</td>
+                  <td className="px-6 py-4">
+                    <div>
+                      <div className="text-xs text-gray-500">Transaction ID:</div>
+                      <div className="text-xs font-mono text-gray-600">{payment.transactionId}</div>
+                      <div className="text-xs text-gray-500 mt-1">Currency:</div>
+                      <div className="text-xs text-gray-600">{payment.currency}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div>
+                      <div className="text-xs text-gray-500">Bank name:</div>
+                      <div className="text-xs text-gray-600">{payment.bankName}</div>
+                      <div className="text-xs text-gray-400 mt-1">{payment.accountInfo}</div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date ↓</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank/Wallet</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payout method</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentItems.map((address, index) => (
+                <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{address.date}</td>
+                  <td className="px-6 py-4">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{address.customer}</div>
+                      <div className="text-sm text-gray-500">{address.email}</div>
+                      <div className="text-xs text-gray-400 font-mono">{address.id}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      {address.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        {address.asset.includes('USDC') && (
+                          <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">$</span>
+                          </div>
+                        )}
+                        {address.asset.includes('USDT') && (
+                          <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">T</span>
+                          </div>
+                        )}
+                        {address.asset.includes('Polygon') && (
+                          <div className="w-5 h-5 bg-purple-600 rounded-full"></div>
+                        )}
+                        {address.asset.includes('Ethereum') && (
+                          <div className="w-5 h-5 bg-gray-700 rounded-full"></div>
+                        )}
+                        {address.asset.includes('Solana') && (
+                          <div className="w-5 h-5 bg-black rounded-full"></div>
+                        )}
+                      </div>
+                      <span className="text-sm text-gray-900">{address.asset}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{address.bankName}</div>
+                      {address.accountInfo && (
+                        <div className="text-xs text-gray-500">{address.accountInfo}</div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{address.payoutMethod}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-mono text-gray-600">{address.address}</span>
+                      <button className="text-gray-400 hover:text-gray-600">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
-      {/* Updated Pagination */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-6">
           <Pagination>
