@@ -32,6 +32,24 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { useToast } from '@/hooks/use-toast';
+import StatusBadge from '@/components/StatusBadge';
+
+const topBlockchains = [
+  { name: 'Ethereum', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' },
+  { name: 'Polygon', logo: 'https://assets.coingecko.com/coins/images/4713/small/matic-token-icon.png' },
+  { name: 'Arbitrum', logo: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg' },
+  { name: 'Base', logo: 'https://assets.coingecko.com/coins/images/30646/small/base.png' },
+  { name: 'Optimism', logo: 'https://assets.coingecko.com/coins/images/25244/small/Optimism.png' },
+];
+
+const topStablecoins = [
+  { name: 'USDC', logo: 'https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png' },
+  { name: 'USDT', logo: 'https://assets.coingecko.com/coins/images/325/small/Tether.png' },
+  { name: 'DAI', logo: 'https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png' },
+  { name: 'FRAX', logo: 'https://assets.coingecko.com/coins/images/13422/small/frax_logo.png' },
+];
+
+const globalCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'CHF', 'SEK', 'NOK', 'DKK'];
 
 const Payments = () => {
   const [activeTab, setActiveTab] = useState<'transactions' | 'liquidation-addresses'>('transactions');
@@ -41,9 +59,27 @@ const Payments = () => {
   const [asset, setAsset] = useState('');
   const [amount, setAmount] = useState('');
   const [memo, setMemo] = useState('');
+  
+  // Payment form state variables
+  const [paymentType, setPaymentType] = useState('');
+  const [customerId, setCustomerId] = useState('');
+  const [sourcePaymentRail, setSourcePaymentRail] = useState('');
+  const [sourceCurrency, setSourceCurrency] = useState('');
+  const [sourceBlockchain, setSourceBlockchain] = useState('');
+  const [developerFee, setDeveloperFee] = useState('');
+  const [destinationPaymentRail, setDestinationPaymentRail] = useState('');
+  const [destinationBlockchain, setDestinationBlockchain] = useState('');
+  const [destinationCurrency, setDestinationCurrency] = useState('');
+  const [destinationWalletAddress, setDestinationWalletAddress] = useState('');
+  const [returnWalletAddress, setReturnWalletAddress] = useState('');
+  
   const { toast } = useToast();
 
   const itemsPerPage = 10;
+
+  // Derived state
+  const shouldShowGlobalCurrencies = paymentType === 'on-ramp' && sourcePaymentRail !== '';
+  const shouldShowMemo = destinationPaymentRail === 'Stellar' || destinationPaymentRail === 'XRP';
 
   const transactions = [
     {
@@ -169,7 +205,7 @@ const Payments = () => {
     setCurrentPage(page);
   };
 
-  const handleTabChange = (tab: string) => {
+  const handleTabChange = (tab: 'transactions' | 'liquidation-addresses') => {
     setActiveTab(tab);
     setCurrentPage(1); // Reset to first page when switching tabs
   };
@@ -230,7 +266,6 @@ const Payments = () => {
       toast({
         title: 'Copied to clipboard',
         description: 'Address copied successfully.',
-        variant: 'success',
       });
     }).catch((err) => {
       toast({
