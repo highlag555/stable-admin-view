@@ -22,7 +22,9 @@ const CustomerDetail = () => {
       tasks: null,
       featureAccess: {
         us: 'Granted',
-        sepa: 'Granted'
+        sepa: 'Granted',
+        cardProcessing: 'Granted',
+        card: 'Granted'
       }
     },
     {
@@ -38,7 +40,9 @@ const CustomerDetail = () => {
       tasks: 1,
       featureAccess: {
         us: 'Pending tasks',
-        sepa: 'Pending tasks'
+        sepa: 'Pending tasks',
+        cardProcessing: 'Pending tasks',
+        card: 'Pending tasks'
       }
     }
   ];
@@ -59,7 +63,6 @@ const CustomerDetail = () => {
         </Link>
       </div>
 
-      {/* Customer header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <h1 className="text-3xl font-bold text-gray-900">{customer.name}</h1>
@@ -104,7 +107,7 @@ const CustomerDetail = () => {
         </div>
       )}
 
-      {/* Feature access section */}
+      {/* Feature access section - updated with new items */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
           <h2 className="text-xl font-semibold text-gray-900">Feature access</h2>
@@ -138,6 +141,44 @@ const CustomerDetail = () => {
               </div>
               <div className="flex items-center">
                 {customer.featureAccess.sepa === 'Granted' ? (
+                  <div className="flex items-center text-green-600">
+                    <span className="text-sm font-medium mr-2">Granted</span>
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  </div>
+                ) : (
+                  <div className="flex items-center text-yellow-600">
+                    <span className="text-sm font-medium mr-2">Pending tasks</span>
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-4">
+              <div>
+                <div className="font-medium text-gray-900">Card Processing</div>
+                <div className="text-sm text-gray-500">Enables on/off ramps for card transactions</div>
+              </div>
+              <div className="flex items-center">
+                {customer.featureAccess.cardProcessing === 'Granted' ? (
+                  <div className="flex items-center text-green-600">
+                    <span className="text-sm font-medium mr-2">Granted</span>
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  </div>
+                ) : (
+                  <div className="flex items-center text-yellow-600">
+                    <span className="text-sm font-medium mr-2">Pending tasks</span>
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-4">
+              <div>
+                <div className="font-medium text-gray-900">Card</div>
+                <div className="text-sm text-gray-500">Enables card spending capabilities</div>
+              </div>
+              <div className="flex items-center">
+                {customer.featureAccess.card === 'Granted' ? (
                   <div className="flex items-center text-green-600">
                     <span className="text-sm font-medium mr-2">Granted</span>
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
