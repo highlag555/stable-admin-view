@@ -1,3 +1,4 @@
+
 import { Plus, Trash2, Copy, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -228,8 +229,8 @@ const ApiKeys = () => {
         </Button>
       </div>
 
-      {/* Environment Toggle - Left aligned under Generate button */}
-      <div className="flex items-center mb-6">
+      {/* Environment Toggle - Right aligned under Generate button */}
+      <div className="flex justify-end mb-6">
         <div className="flex items-center space-x-4">
           <span className={`text-sm font-medium ${activeTab === 'production' ? 'text-gray-900' : 'text-gray-500'}`}>
             Production
