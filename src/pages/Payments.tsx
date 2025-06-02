@@ -1,4 +1,4 @@
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, MoreHorizontal, Copy } from 'lucide-react';
 import { useState } from 'react';
 import StatusBadge from '../components/StatusBadge';
 import {
@@ -17,6 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -46,34 +52,34 @@ const Payments = () => {
   const [memo, setMemo] = useState('');
 
   const topBlockchains = [
-    'Ethereum',
-    'Bitcoin',
-    'Binance Smart Chain',
-    'Polygon',
-    'Avalanche',
-    'Solana',
-    'Cardano',
-    'Polkadot',
-    'Chainlink',
-    'Litecoin',
-    'Stellar',
-    'Cosmos',
-    'Algorand',
-    'Tron',
-    'Near Protocol',
-    'Fantom',
-    'Harmony',
-    'Arbitrum',
-    'Optimism',
-    'Cronos'
+    { name: 'Ethereum', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Bitcoin', logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Binance Smart Chain', logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Polygon', logo: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Avalanche', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Solana', logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Cardano', logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Polkadot', logo: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Chainlink', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Litecoin', logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Stellar', logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Cosmos', logo: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Algorand', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Tron', logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Near Protocol', logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Fantom', logo: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Harmony', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Arbitrum', logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Optimism', logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=24&h=24&fit=crop&crop=center' },
+    { name: 'Cronos', logo: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=24&h=24&fit=crop&crop=center' }
   ];
 
   const topStablecoins = [
-    'USDC',
-    'USDT',
-    'DAI',
-    'BUSD',
-    'FRAX'
+    { name: 'USDC', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' },
+    { name: 'USDT', logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=24&h=24&fit=crop&crop=center' },
+    { name: 'DAI', logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=24&h=24&fit=crop&crop=center' },
+    { name: 'BUSD', logo: 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=24&h=24&fit=crop&crop=center' },
+    { name: 'FRAX', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=24&h=24&fit=crop&crop=center' }
   ];
 
   const globalCurrencies = [
@@ -296,6 +302,29 @@ const Payments = () => {
     setIsCreateModalOpen(false);
   };
 
+  const getAssetLogo = (asset: string) => {
+    if (asset.includes('USDC')) {
+      return 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=20&h=20&fit=crop&crop=center';
+    }
+    if (asset.includes('USDT')) {
+      return 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=20&h=20&fit=crop&crop=center';
+    }
+    return 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=20&h=20&fit=crop&crop=center';
+  };
+
+  const getChainLogo = (asset: string) => {
+    if (asset.includes('Polygon')) {
+      return 'https://images.unsplash.com/photo-1494891848038-7bd202a2afeb?w=20&h=20&fit=crop&crop=center';
+    }
+    if (asset.includes('Ethereum')) {
+      return 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=20&h=20&fit=crop&crop=center';
+    }
+    if (asset.includes('Solana')) {
+      return 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=20&h=20&fit=crop&crop=center';
+    }
+    return 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=20&h=20&fit=crop&crop=center';
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -315,7 +344,7 @@ const Payments = () => {
           onClick={() => handleTabChange('history')}
           className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
             activeTab === 'history' 
-              ? 'text-blue-600 border-blue-600' 
+              ? 'border-gray-900 text-gray-900' 
               : 'text-gray-500 border-transparent hover:text-gray-700'
           }`}
         >
@@ -325,7 +354,7 @@ const Payments = () => {
           onClick={() => handleTabChange('liquidation')}
           className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
             activeTab === 'liquidation' 
-              ? 'text-blue-600 border-blue-600' 
+              ? 'border-gray-900 text-gray-900' 
               : 'text-gray-500 border-transparent hover:text-gray-700'
           }`}
         >
@@ -404,6 +433,7 @@ const Payments = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank/Wallet</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payout method</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -425,25 +455,16 @@ const Payments = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                       <div className="flex space-x-1">
-                        {address.asset.includes('USDC') && (
-                          <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                            <span className="text-white text-xs font-bold">$</span>
-                          </div>
-                        )}
-                        {address.asset.includes('USDT') && (
-                          <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-xs font-bold">T</span>
-                          </div>
-                        )}
-                        {address.asset.includes('Polygon') && (
-                          <div className="w-5 h-5 bg-purple-600 rounded-full"></div>
-                        )}
-                        {address.asset.includes('Ethereum') && (
-                          <div className="w-5 h-5 bg-gray-700 rounded-full"></div>
-                        )}
-                        {address.asset.includes('Solana') && (
-                          <div className="w-5 h-5 bg-black rounded-full"></div>
-                        )}
+                        <img 
+                          src={getAssetLogo(address.asset)} 
+                          alt="Asset logo" 
+                          className="w-5 h-5 rounded-full"
+                        />
+                        <img 
+                          src={getChainLogo(address.asset)} 
+                          alt="Chain logo" 
+                          className="w-5 h-5 rounded-full"
+                        />
                       </div>
                       <span className="text-sm text-gray-900">{address.asset}</span>
                     </div>
@@ -461,11 +482,23 @@ const Payments = () => {
                     <div className="flex items-center space-x-2">
                       <span className="text-sm font-mono text-gray-600">{address.address}</span>
                       <button className="text-gray-400 hover:text-gray-600">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
+                        <Copy className="w-4 h-4" />
                       </button>
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="bg-white">
+                        <DropdownMenuItem>View details</DropdownMenuItem>
+                        <DropdownMenuItem>Edit address</DropdownMenuItem>
+                        <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </td>
                 </tr>
               ))}
@@ -573,8 +606,11 @@ const Payments = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {topBlockchains.map((blockchain) => (
-                          <SelectItem key={blockchain} value={blockchain}>
-                            {blockchain}
+                          <SelectItem key={blockchain.name} value={blockchain.name}>
+                            <div className="flex items-center space-x-2">
+                              <img src={blockchain.logo} alt={blockchain.name} className="w-4 h-4 rounded-full" />
+                              <span>{blockchain.name}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -590,8 +626,11 @@ const Payments = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {topStablecoins.map((coin) => (
-                          <SelectItem key={coin} value={coin}>
-                            {coin}
+                          <SelectItem key={coin.name} value={coin.name}>
+                            <div className="flex items-center space-x-2">
+                              <img src={coin.logo} alt={coin.name} className="w-4 h-4 rounded-full" />
+                              <span>{coin.name}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -610,8 +649,11 @@ const Payments = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {topBlockchains.map((blockchain) => (
-                          <SelectItem key={blockchain} value={blockchain}>
-                            {blockchain}
+                          <SelectItem key={blockchain.name} value={blockchain.name}>
+                            <div className="flex items-center space-x-2">
+                              <img src={blockchain.logo} alt={blockchain.name} className="w-4 h-4 rounded-full" />
+                              <span>{blockchain.name}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -627,8 +669,11 @@ const Payments = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {topStablecoins.map((coin) => (
-                          <SelectItem key={coin} value={coin}>
-                            {coin}
+                          <SelectItem key={coin.name} value={coin.name}>
+                            <div className="flex items-center space-x-2">
+                              <img src={coin.logo} alt={coin.name} className="w-4 h-4 rounded-full" />
+                              <span>{coin.name}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -713,8 +758,11 @@ const Payments = () => {
                           ))
                         ) : (
                           topStablecoins.map((coin) => (
-                            <SelectItem key={coin} value={coin}>
-                              {coin}
+                            <SelectItem key={coin.name} value={coin.name}>
+                              <div className="flex items-center space-x-2">
+                                <img src={coin.logo} alt={coin.name} className="w-4 h-4 rounded-full" />
+                                <span>{coin.name}</span>
+                              </div>
                             </SelectItem>
                           ))
                         )}
@@ -760,8 +808,11 @@ const Payments = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {topBlockchains.map((blockchain) => (
-                          <SelectItem key={blockchain} value={blockchain}>
-                            {blockchain}
+                          <SelectItem key={blockchain.name} value={blockchain.name}>
+                            <div className="flex items-center space-x-2">
+                              <img src={blockchain.logo} alt={blockchain.name} className="w-4 h-4 rounded-full" />
+                              <span>{blockchain.name}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -777,8 +828,11 @@ const Payments = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {topStablecoins.map((coin) => (
-                          <SelectItem key={coin} value={coin}>
-                            {coin}
+                          <SelectItem key={coin.name} value={coin.name}>
+                            <div className="flex items-center space-x-2">
+                              <img src={coin.logo} alt={coin.name} className="w-4 h-4 rounded-full" />
+                              <span>{coin.name}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
