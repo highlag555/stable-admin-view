@@ -28,6 +28,7 @@ const ApiKeys = () => {
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [newGeneratedKey, setNewGeneratedKey] = useState<string>('');
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
+  const [keyTypeToGenerate, setKeyTypeToGenerate] = useState<'sandbox' | 'production'>('production');
   const [activeTab, setActiveTab] = useState<'sandbox' | 'production'>('production');
   const { toast } = useToast();
 
@@ -218,27 +219,18 @@ const ApiKeys = () => {
 
       {/* Environment Toggle */}
       <div className="flex items-center justify-center mb-8">
-        <div className="flex items-center space-x-4 bg-gray-100 rounded-lg p-1">
-          <button
-            onClick={() => setActiveTab('production')}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === 'production'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
+        <div className="flex items-center space-x-4">
+          <span className={`text-sm font-medium ${activeTab === 'production' ? 'text-gray-900' : 'text-gray-500'}`}>
             Production
-          </button>
-          <button
-            onClick={() => setActiveTab('sandbox')}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === 'sandbox'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
+          </span>
+          <Switch
+            checked={activeTab === 'sandbox'}
+            onCheckedChange={(checked) => setActiveTab(checked ? 'sandbox' : 'production')}
+            className="data-[state=checked]:bg-yellow-500"
+          />
+          <span className={`text-sm font-medium ${activeTab === 'sandbox' ? 'text-gray-900' : 'text-gray-500'}`}>
             Sandbox
-          </button>
+          </span>
         </div>
       </div>
 
@@ -286,7 +278,7 @@ const ApiKeys = () => {
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-gray-600">
-              Your API key has been generated successfully. Please copy it now as it will not be shown again.
+              Your {keyTypeToGenerate} API key has been generated successfully. Please copy it now as it will not be shown again.
             </p>
             <div className="flex items-center space-x-2 p-3 bg-gray-100 rounded-md">
               <code className="flex-1 text-sm font-mono text-gray-900 break-all">
