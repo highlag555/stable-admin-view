@@ -34,6 +34,37 @@ const Payments = () => {
   const [returnWalletAddress, setReturnWalletAddress] = useState('');
   const [memo, setMemo] = useState('');
 
+  const topBlockchains = [
+    'Ethereum',
+    'Bitcoin',
+    'Binance Smart Chain',
+    'Polygon',
+    'Avalanche',
+    'Solana',
+    'Cardano',
+    'Polkadot',
+    'Chainlink',
+    'Litecoin',
+    'Stellar',
+    'Cosmos',
+    'Algorand',
+    'Tron',
+    'Near Protocol',
+    'Fantom',
+    'Harmony',
+    'Arbitrum',
+    'Optimism',
+    'Cronos'
+  ];
+
+  const topStablecoins = [
+    'USDC',
+    'USDT',
+    'DAI',
+    'BUSD',
+    'FRAX'
+  ];
+
   const payments = [
     {
       date: 'Jun 1, 2025',
@@ -281,25 +312,35 @@ const Payments = () => {
                     <Label htmlFor="source-blockchain" className="text-base font-medium">
                       Source Blockchain
                     </Label>
-                    <Input
-                      id="source-blockchain"
-                      placeholder="Ethereum"
-                      value={sourceBlockchain}
-                      onChange={(e) => setSourceBlockchain(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={sourceBlockchain} onValueChange={setSourceBlockchain}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select blockchain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topBlockchains.map((blockchain) => (
+                          <SelectItem key={blockchain} value={blockchain}>
+                            {blockchain}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="source-currency" className="text-base font-medium">
                       Source Currency
                     </Label>
-                    <Input
-                      id="source-currency"
-                      placeholder="USDC"
-                      value={sourceCurrency}
-                      onChange={(e) => setSourceCurrency(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={sourceCurrency} onValueChange={setSourceCurrency}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topStablecoins.map((coin) => (
+                          <SelectItem key={coin} value={coin}>
+                            {coin}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -308,25 +349,35 @@ const Payments = () => {
                     <Label htmlFor="destination-payment-rail" className="text-base font-medium">
                       Destination payment rail
                     </Label>
-                    <Input
-                      id="destination-payment-rail"
-                      placeholder="Stellar"
-                      value={destinationPaymentRail}
-                      onChange={(e) => setDestinationPaymentRail(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={destinationPaymentRail} onValueChange={setDestinationPaymentRail}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select blockchain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topBlockchains.map((blockchain) => (
+                          <SelectItem key={blockchain} value={blockchain}>
+                            {blockchain}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="destination-currency" className="text-base font-medium">
                       Destination Currency
                     </Label>
-                    <Input
-                      id="destination-currency"
-                      placeholder="USDC"
-                      value={destinationCurrency}
-                      onChange={(e) => setDestinationCurrency(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={destinationCurrency} onValueChange={setDestinationCurrency}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topStablecoins.map((coin) => (
+                          <SelectItem key={coin} value={coin}>
+                            {coin}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -392,13 +443,18 @@ const Payments = () => {
                     <Label htmlFor="source-currency" className="text-base font-medium">
                       Source Currency
                     </Label>
-                    <Input
-                      id="source-currency"
-                      placeholder="USD"
-                      value={sourceCurrency}
-                      onChange={(e) => setSourceCurrency(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={sourceCurrency} onValueChange={setSourceCurrency}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topStablecoins.map((coin) => (
+                          <SelectItem key={coin} value={coin}>
+                            {coin}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -433,25 +489,35 @@ const Payments = () => {
                     <Label htmlFor="destination-blockchain" className="text-base font-medium">
                       Destination Blockchain
                     </Label>
-                    <Input
-                      id="destination-blockchain"
-                      placeholder="Ethereum"
-                      value={destinationBlockchain}
-                      onChange={(e) => setDestinationBlockchain(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={destinationBlockchain} onValueChange={setDestinationBlockchain}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select blockchain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topBlockchains.map((blockchain) => (
+                          <SelectItem key={blockchain} value={blockchain}>
+                            {blockchain}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="destination-currency" className="text-base font-medium">
                       Destination Currency
                     </Label>
-                    <Input
-                      id="destination-currency"
-                      placeholder="USDC"
-                      value={destinationCurrency}
-                      onChange={(e) => setDestinationCurrency(e.target.value)}
-                      className="w-full"
-                    />
+                    <Select value={destinationCurrency} onValueChange={setDestinationCurrency}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topStablecoins.map((coin) => (
+                          <SelectItem key={coin} value={coin}>
+                            {coin}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
