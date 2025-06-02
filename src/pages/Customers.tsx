@@ -1,6 +1,5 @@
-
 import { Search, Plus, Info } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import StatusBadge from '../components/StatusBadge';
 import {
@@ -15,6 +14,7 @@ import { Label } from "../components/ui/label";
 import { Switch } from "../components/ui/switch";
 
 const Customers = () => {
+  const navigate = useNavigate();
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -36,9 +36,14 @@ const Customers = () => {
     { id: '10', name: 'Farjana Akter', dateAdded: '06/01/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
   ];
 
-  const handleTaskClick = (customer: any) => {
+  const handleTaskClick = (e: React.MouseEvent, customer: any) => {
+    e.stopPropagation();
     setSelectedCustomer(customer);
     setIsModalOpen(true);
+  };
+
+  const handleRowClick = (customerId: string) => {
+    navigate(`/customer/${customerId}`);
   };
 
   const handleCreateCustomer = () => {
@@ -115,14 +120,13 @@ const Customers = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {customers.map((customer) => (
-              <tr key={customer.id} className="hover:bg-gray-50 transition-colors duration-150">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  <Link 
-                    to={`/customer/${customer.id}`}
-                    className="text-blue-600 hover:text-blue-800 hover:underline"
-                  >
-                    {customer.name}
-                  </Link>
+              <tr 
+                key={customer.id} 
+                className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+                onClick={() => handleRowClick(customer.id)}
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {customer.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.dateAdded}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.type}</td>
@@ -134,7 +138,7 @@ const Customers = () => {
                     <div className="flex items-center">
                       <span className="text-yellow-600 font-medium mr-2">{customer.tasks}</span>
                       <button
-                        onClick={() => handleTaskClick(customer)}
+                        onClick={(e) => handleTaskClick(e, customer)}
                         className="w-2 h-2 bg-yellow-500 rounded-full hover:bg-yellow-600 transition-colors cursor-pointer"
                         title="View verification tasks"
                       ></button>
