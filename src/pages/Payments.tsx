@@ -1,3 +1,4 @@
+
 import { Search, Plus } from 'lucide-react';
 import { useState } from 'react';
 import StatusBadge from '../components/StatusBadge';
@@ -417,7 +418,7 @@ const Payments = () => {
                 {shouldShowMemo && (
                   <div className="space-y-2">
                     <Label htmlFor="memo" className="text-base font-medium">
-                      Memo
+                      Memo for {destinationPaymentRail} transfer
                     </Label>
                     <Input
                       id="memo"
