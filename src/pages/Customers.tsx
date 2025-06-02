@@ -9,10 +9,18 @@ import {
   DialogTitle,
 } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Switch } from "../components/ui/switch";
 
 const Customers = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [customerType, setCustomerType] = useState<'Individual' | 'Business'>('Individual');
+  const [customerName, setCustomerName] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [sepaEndorsement, setSepaEndorsement] = useState(false);
 
   const customers = [
     { id: '1', name: 'Ya-Chen Huang', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
@@ -32,11 +40,39 @@ const Customers = () => {
     setIsModalOpen(true);
   };
 
+  const handleCreateCustomer = () => {
+    // Here you would typically save the customer data
+    console.log('Creating customer:', {
+      name: customerName,
+      email: customerEmail,
+      type: customerType,
+      sepaEndorsement
+    });
+    
+    // Reset form and close modal
+    setCustomerName('');
+    setCustomerEmail('');
+    setCustomerType('Individual');
+    setSepaEndorsement(false);
+    setIsCreateModalOpen(false);
+  };
+
+  const handleCancelCreate = () => {
+    setCustomerName('');
+    setCustomerEmail('');
+    setCustomerType('Individual');
+    setSepaEndorsement(false);
+    setIsCreateModalOpen(false);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
-        <button className="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200">
+        <button 
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200"
+        >
           <Plus className="w-4 h-4 mr-2" />
           Create customer
         </button>
@@ -114,6 +150,104 @@ const Customers = () => {
         <button className="text-gray-400 text-sm">← Previous</button>
         <button className="text-gray-900 text-sm font-medium">Next →</button>
       </div>
+
+      {/* Create Customer Modal */}
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Create customer</DialogTitle>
+            <p className="text-sm text-gray-600 mt-1">All fields are required.</p>
+          </DialogHeader>
+          <div className="space-y-6 mt-6">
+            <div className="space-y-2">
+              <Label htmlFor="customer-name" className="text-base font-medium">
+                Customer or business name
+              </Label>
+              <Input
+                id="customer-name"
+                placeholder="i.e. John Doe"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="customer-email" className="text-base font-medium">
+                Email address
+              </Label>
+              <Input
+                id="customer-email"
+                type="email"
+                placeholder="xxxxxx@xxxx.xxx"
+                value={customerEmail}
+                onChange={(e) => setCustomerEmail(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">
+                  Request SEPA/SWIFT endorsement
+                </Label>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 border border-gray-300 rounded-full flex items-center justify-center text-xs">?</span>
+                  <Switch
+                    checked={sepaEndorsement}
+                    onCheckedChange={setSepaEndorsement}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Type</Label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setCustomerType('Individual')}
+                  className={`flex-1 py-3 px-4 rounded-md text-center font-medium transition-colors ${
+                    customerType === 'Individual'
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Individual
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCustomerType('Business')}
+                  className={`flex-1 py-3 px-4 rounded-md text-center font-medium transition-colors ${
+                    customerType === 'Business'
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Business
+                </button>
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={handleCancelCreate}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCreateCustomer}
+                disabled={!customerName || !customerEmail}
+                className="flex-1 bg-black hover:bg-gray-800 text-white"
+              >
+                Create customer
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Tasks Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
