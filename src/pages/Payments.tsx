@@ -24,11 +24,15 @@ const Payments = () => {
   const [customerId, setCustomerId] = useState('');
   const [sourcePaymentRail, setSourcePaymentRail] = useState('');
   const [sourceCurrency, setSourceCurrency] = useState('');
+  const [sourceBlockchain, setSourceBlockchain] = useState('');
   const [amount, setAmount] = useState('');
   const [developerFee, setDeveloperFee] = useState('');
+  const [destinationPaymentRail, setDestinationPaymentRail] = useState('');
   const [destinationBlockchain, setDestinationBlockchain] = useState('');
   const [destinationCurrency, setDestinationCurrency] = useState('');
-  const [walletAddress, setWalletAddress] = useState('');
+  const [destinationWalletAddress, setDestinationWalletAddress] = useState('');
+  const [returnWalletAddress, setReturnWalletAddress] = useState('');
+  const [memo, setMemo] = useState('');
 
   const payments = [
     {
@@ -91,11 +95,15 @@ const Payments = () => {
       customerId,
       sourcePaymentRail,
       sourceCurrency,
+      sourceBlockchain,
       amount,
       developerFee,
+      destinationPaymentRail,
       destinationBlockchain,
       destinationCurrency,
-      walletAddress
+      destinationWalletAddress,
+      returnWalletAddress,
+      memo
     });
     
     // Reset form and close modal
@@ -103,11 +111,15 @@ const Payments = () => {
     setCustomerId('');
     setSourcePaymentRail('');
     setSourceCurrency('');
+    setSourceBlockchain('');
     setAmount('');
     setDeveloperFee('');
+    setDestinationPaymentRail('');
     setDestinationBlockchain('');
     setDestinationCurrency('');
-    setWalletAddress('');
+    setDestinationWalletAddress('');
+    setReturnWalletAddress('');
+    setMemo('');
     setIsCreateModalOpen(false);
   };
 
@@ -116,11 +128,15 @@ const Payments = () => {
     setCustomerId('');
     setSourcePaymentRail('');
     setSourceCurrency('');
+    setSourceBlockchain('');
     setAmount('');
     setDeveloperFee('');
+    setDestinationPaymentRail('');
     setDestinationBlockchain('');
     setDestinationCurrency('');
-    setWalletAddress('');
+    setDestinationWalletAddress('');
+    setReturnWalletAddress('');
+    setMemo('');
     setIsCreateModalOpen(false);
   };
 
@@ -222,7 +238,9 @@ const Payments = () => {
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Create on-ramp</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">
+              {paymentType === 'crypto-to-crypto' ? 'Create crypto to crypto' : 'Create on-ramp'}
+            </DialogTitle>
             <p className="text-sm text-gray-600 mt-1">All fields are required.</p>
           </DialogHeader>
           <div className="space-y-6 mt-6">
@@ -237,6 +255,7 @@ const Payments = () => {
                 <SelectContent>
                   <SelectItem value="on-ramp">On-Ramp</SelectItem>
                   <SelectItem value="off-ramp">Off-Ramp</SelectItem>
+                  <SelectItem value="crypto-to-crypto">Crypto to Crypto</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -254,98 +273,202 @@ const Payments = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="source-payment-rail" className="text-base font-medium">
-                  Source payment rail
-                </Label>
-                <Input
-                  id="source-payment-rail"
-                  placeholder="ACH push"
-                  value={sourcePaymentRail}
-                  onChange={(e) => setSourcePaymentRail(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="source-currency" className="text-base font-medium">
-                  Source Currency
-                </Label>
-                <Input
-                  id="source-currency"
-                  placeholder="USD"
-                  value={sourceCurrency}
-                  onChange={(e) => setSourceCurrency(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            </div>
+            {paymentType === 'crypto-to-crypto' ? (
+              // Crypto to Crypto fields
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="source-blockchain" className="text-base font-medium">
+                      Source Blockchain
+                    </Label>
+                    <Input
+                      id="source-blockchain"
+                      placeholder="Ethereum"
+                      value={sourceBlockchain}
+                      onChange={(e) => setSourceBlockchain(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="source-currency" className="text-base font-medium">
+                      Source Currency
+                    </Label>
+                    <Input
+                      id="source-currency"
+                      placeholder="USDC"
+                      value={sourceCurrency}
+                      onChange={(e) => setSourceCurrency(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="amount" className="text-base font-medium">
-                Amount
-              </Label>
-              <Input
-                id="amount"
-                placeholder="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full"
-              />
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="destination-payment-rail" className="text-base font-medium">
+                      Destination payment rail
+                    </Label>
+                    <Input
+                      id="destination-payment-rail"
+                      placeholder="Stellar"
+                      value={destinationPaymentRail}
+                      onChange={(e) => setDestinationPaymentRail(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="destination-currency" className="text-base font-medium">
+                      Destination Currency
+                    </Label>
+                    <Input
+                      id="destination-currency"
+                      placeholder="USDC"
+                      value={destinationCurrency}
+                      onChange={(e) => setDestinationCurrency(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="developer-fee" className="text-base font-medium">
-                Developer fee
-              </Label>
-              <Input
-                id="developer-fee"
-                placeholder="0"
-                value={developerFee}
-                onChange={(e) => setDeveloperFee(e.target.value)}
-                className="w-full"
-              />
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="destination-wallet-address" className="text-base font-medium">
+                    Destination wallet address
+                  </Label>
+                  <Input
+                    id="destination-wallet-address"
+                    placeholder=""
+                    value={destinationWalletAddress}
+                    onChange={(e) => setDestinationWalletAddress(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="destination-blockchain" className="text-base font-medium">
-                  Destination Blockchain
-                </Label>
-                <Input
-                  id="destination-blockchain"
-                  placeholder="Ethereum"
-                  value={destinationBlockchain}
-                  onChange={(e) => setDestinationBlockchain(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="destination-currency" className="text-base font-medium">
-                  Destination Currency
-                </Label>
-                <Input
-                  id="destination-currency"
-                  placeholder="USDC"
-                  value={destinationCurrency}
-                  onChange={(e) => setDestinationCurrency(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="return-wallet-address" className="text-base font-medium">
+                    Return wallet address
+                  </Label>
+                  <Input
+                    id="return-wallet-address"
+                    placeholder=""
+                    value={returnWalletAddress}
+                    onChange={(e) => setReturnWalletAddress(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="wallet-address" className="text-base font-medium">
-                Wallet address
-              </Label>
-              <Input
-                id="wallet-address"
-                placeholder=""
-                value={walletAddress}
-                onChange={(e) => setWalletAddress(e.target.value)}
-                className="w-full"
-              />
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="memo" className="text-base font-medium">
+                    Memo
+                  </Label>
+                  <Input
+                    id="memo"
+                    placeholder="Memo for Stellar transfer"
+                    value={memo}
+                    onChange={(e) => setMemo(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </>
+            ) : (
+              // On-ramp/Off-ramp fields
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="source-payment-rail" className="text-base font-medium">
+                      Source payment rail
+                    </Label>
+                    <Select value={sourcePaymentRail} onValueChange={setSourcePaymentRail}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select payment rail" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="bank-transfer">Bank Transfer</SelectItem>
+                        <SelectItem value="card">Card</SelectItem>
+                        <SelectItem value="mobile-wallet">Mobile Wallet</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="source-currency" className="text-base font-medium">
+                      Source Currency
+                    </Label>
+                    <Input
+                      id="source-currency"
+                      placeholder="USD"
+                      value={sourceCurrency}
+                      onChange={(e) => setSourceCurrency(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="amount" className="text-base font-medium">
+                    Amount
+                  </Label>
+                  <Input
+                    id="amount"
+                    placeholder="0"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="developer-fee" className="text-base font-medium">
+                    Developer fee
+                  </Label>
+                  <Input
+                    id="developer-fee"
+                    placeholder="0"
+                    value={developerFee}
+                    onChange={(e) => setDeveloperFee(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="destination-blockchain" className="text-base font-medium">
+                      Destination Blockchain
+                    </Label>
+                    <Input
+                      id="destination-blockchain"
+                      placeholder="Ethereum"
+                      value={destinationBlockchain}
+                      onChange={(e) => setDestinationBlockchain(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="destination-currency" className="text-base font-medium">
+                      Destination Currency
+                    </Label>
+                    <Input
+                      id="destination-currency"
+                      placeholder="USDC"
+                      value={destinationCurrency}
+                      onChange={(e) => setDestinationCurrency(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="wallet-address" className="text-base font-medium">
+                    Wallet address
+                  </Label>
+                  <Input
+                    id="wallet-address"
+                    placeholder=""
+                    value={destinationWalletAddress}
+                    onChange={(e) => setDestinationWalletAddress(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </>
+            )}
 
             <div className="flex gap-3 pt-4">
               <Button
@@ -357,7 +480,7 @@ const Payments = () => {
               </Button>
               <Button
                 onClick={handleCreatePayment}
-                disabled={!paymentType || !customerId || !amount}
+                disabled={!paymentType || !customerId}
                 className="flex-1 bg-black hover:bg-gray-800 text-white"
               >
                 Create
