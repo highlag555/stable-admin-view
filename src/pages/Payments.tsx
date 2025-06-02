@@ -78,7 +78,8 @@ const Payments = () => {
   const itemsPerPage = 10;
 
   // Derived state
-  const shouldShowGlobalCurrencies = paymentType === 'on-ramp' && sourcePaymentRail !== '';
+  const shouldShowGlobalCurrencies = (paymentType === 'on-ramp' && sourcePaymentRail !== '') || 
+                                   (paymentType === 'off-ramp' && sourcePaymentRail !== '');
   const shouldShowMemo = destinationPaymentRail === 'Stellar' || destinationPaymentRail === 'XRP';
 
   const transactions = [
@@ -505,7 +506,7 @@ const Payments = () => {
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">
-              {paymentType === 'crypto-to-crypto' ? 'Create crypto to crypto' : 'Create on-ramp'}
+              Create payment
             </DialogTitle>
             <p className="text-sm text-gray-600 mt-1">All fields are required.</p>
           </DialogHeader>
