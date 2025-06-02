@@ -1,12 +1,11 @@
+
 import { Link, useLocation } from 'react-router-dom';
-import { Users, CreditCard, Key, UserCheck, FileText, LogOut, Menu, X } from 'lucide-react';
+import { Users, CreditCard, Key, UserCheck, FileText, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 
 const Navigation = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { logout } = useAuth0();
   
   const navItems = [
     { name: 'Customers', path: '/', icon: Users },
@@ -18,10 +17,6 @@ const Navigation = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleLogout = () => {
-    logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
   return (
@@ -57,17 +52,6 @@ const Navigation = () => {
                 );
               })}
             </div>
-          </div>
-          
-          {/* Desktop Sign Out */}
-          <div className="hidden md:flex md:items-center">
-            <button 
-              onClick={handleLogout}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors duration-200"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign out
-            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -109,13 +93,6 @@ const Navigation = () => {
                 </Link>
               );
             })}
-            <button 
-              onClick={handleLogout}
-              className="flex items-center w-full px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-            >
-              <LogOut className="w-5 h-5 mr-3" />
-              Sign out
-            </button>
           </div>
         </div>
       )}
