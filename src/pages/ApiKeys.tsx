@@ -217,8 +217,19 @@ const ApiKeys = () => {
         </p>
       </div>
 
-      {/* Environment Toggle */}
-      <div className="flex items-center justify-center mb-8">
+      {/* Generate Key Button */}
+      <div className="flex justify-end mb-4">
+        <Button 
+          onClick={() => generateApiKey(activeTab)} 
+          className="bg-gray-800 hover:bg-gray-700"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Generate {activeTab === 'production' ? 'Production' : 'Sandbox'} Key
+        </Button>
+      </div>
+
+      {/* Environment Toggle - Left aligned under Generate button */}
+      <div className="flex items-center mb-6">
         <div className="flex items-center space-x-4">
           <span className={`text-sm font-medium ${activeTab === 'production' ? 'text-gray-900' : 'text-gray-500'}`}>
             Production
@@ -254,17 +265,6 @@ const ApiKeys = () => {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Generate Key Button */}
-      <div className="flex justify-end mb-4">
-        <Button 
-          onClick={() => generateApiKey(activeTab)} 
-          className="bg-gray-800 hover:bg-gray-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Generate {activeTab === 'production' ? 'Production' : 'Sandbox'} Key
-        </Button>
       </div>
 
       {/* API Keys Table */}
