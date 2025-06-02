@@ -1,3 +1,4 @@
+
 import { Search, Plus, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -209,7 +210,7 @@ const Customers = () => {
                   onClick={() => setCustomerType('Individual')}
                   className={`flex-1 py-3 px-4 rounded-md text-center font-medium transition-colors ${
                     customerType === 'Individual'
-                      ? 'bg-gray-800 text-white'
+                      ? 'bg-gray-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -220,7 +221,7 @@ const Customers = () => {
                   onClick={() => setCustomerType('Business')}
                   className={`flex-1 py-3 px-4 rounded-md text-center font-medium transition-colors ${
                     customerType === 'Business'
-                      ? 'bg-gray-800 text-white'
+                      ? 'bg-gray-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
