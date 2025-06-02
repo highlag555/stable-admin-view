@@ -17,9 +17,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../components/ui/pagination";
 
 const Payments = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [paymentType, setPaymentType] = useState<string>('');
   const [customerId, setCustomerId] = useState('');
   const [sourcePaymentRail, setSourcePaymentRail] = useState('');
@@ -154,6 +164,17 @@ const Payments = () => {
     }
   ];
 
+  // Pagination logic
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(payments.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPayments = payments.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   const handleCreatePayment = () => {
     console.log('Creating payment:', {
       paymentType,
@@ -249,7 +270,7 @@ const Payments = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {payments.map((payment, index) => (
+            {currentPayments.map((payment, index) => (
               <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{payment.date}</td>
                 <td className="px-6 py-4">
@@ -285,20 +306,51 @@ const Payments = () => {
         </table>
       </div>
 
-      <div className="flex justify-center items-center mt-6 space-x-2">
-        <button className="text-gray-400 text-sm">{'<'} Previous</button>
-        {[1, 2, 3, 4, 5, 6].map((page) => (
-          <button
-            key={page}
-            className={`px-3 py-1 text-sm rounded ${
-              page === 1 ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            {page}
-          </button>
-        ))}
-        <button className="text-gray-900 text-sm font-medium">Next {'>'}</button>
-      </div>
+      {/* Updated Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) handlePageChange(currentPage - 1);
+                  }}
+                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(page);
+                    }}
+                    isActive={currentPage === page}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              
+              <PaginationItem>
+                <PaginationNext 
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) handlePageChange(currentPage + 1);
+                  }}
+                  className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       {/* Create Payment Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
