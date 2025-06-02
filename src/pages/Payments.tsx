@@ -1,8 +1,35 @@
-
 import { Search, Plus } from 'lucide-react';
+import { useState } from 'react';
 import StatusBadge from '../components/StatusBadge';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 const Payments = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [paymentType, setPaymentType] = useState<string>('');
+  const [customerId, setCustomerId] = useState('');
+  const [sourcePaymentRail, setSourcePaymentRail] = useState('');
+  const [sourceCurrency, setSourceCurrency] = useState('');
+  const [amount, setAmount] = useState('');
+  const [developerFee, setDeveloperFee] = useState('');
+  const [destinationBlockchain, setDestinationBlockchain] = useState('');
+  const [destinationCurrency, setDestinationCurrency] = useState('');
+  const [walletAddress, setWalletAddress] = useState('');
+
   const payments = [
     {
       date: 'Jun 1, 2025',
@@ -58,11 +85,53 @@ const Payments = () => {
     }
   ];
 
+  const handleCreatePayment = () => {
+    console.log('Creating payment:', {
+      paymentType,
+      customerId,
+      sourcePaymentRail,
+      sourceCurrency,
+      amount,
+      developerFee,
+      destinationBlockchain,
+      destinationCurrency,
+      walletAddress
+    });
+    
+    // Reset form and close modal
+    setPaymentType('');
+    setCustomerId('');
+    setSourcePaymentRail('');
+    setSourceCurrency('');
+    setAmount('');
+    setDeveloperFee('');
+    setDestinationBlockchain('');
+    setDestinationCurrency('');
+    setWalletAddress('');
+    setIsCreateModalOpen(false);
+  };
+
+  const handleCancelCreate = () => {
+    setPaymentType('');
+    setCustomerId('');
+    setSourcePaymentRail('');
+    setSourceCurrency('');
+    setAmount('');
+    setDeveloperFee('');
+    setDestinationBlockchain('');
+    setDestinationCurrency('');
+    setWalletAddress('');
+    setIsCreateModalOpen(false);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Payments</h1>
-        <button className="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200">
+        <button 
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200"
+        >
           <Plus className="w-4 h-4 mr-2" />
           Create payment
         </button>
@@ -148,6 +217,155 @@ const Payments = () => {
         ))}
         <button className="text-gray-900 text-sm font-medium">Next {'>'}</button>
       </div>
+
+      {/* Create Payment Modal */}
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Create on-ramp</DialogTitle>
+            <p className="text-sm text-gray-600 mt-1">All fields are required.</p>
+          </DialogHeader>
+          <div className="space-y-6 mt-6">
+            <div className="space-y-2">
+              <Label htmlFor="payment-type" className="text-base font-medium">
+                Payment Type
+              </Label>
+              <Select value={paymentType} onValueChange={setPaymentType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select payment type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="on-ramp">On-Ramp</SelectItem>
+                  <SelectItem value="off-ramp">Off-Ramp</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="customer-id" className="text-base font-medium">
+                Customer ID
+              </Label>
+              <Input
+                id="customer-id"
+                placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                value={customerId}
+                onChange={(e) => setCustomerId(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="source-payment-rail" className="text-base font-medium">
+                  Source payment rail
+                </Label>
+                <Input
+                  id="source-payment-rail"
+                  placeholder="ACH push"
+                  value={sourcePaymentRail}
+                  onChange={(e) => setSourcePaymentRail(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="source-currency" className="text-base font-medium">
+                  Source Currency
+                </Label>
+                <Input
+                  id="source-currency"
+                  placeholder="USD"
+                  value={sourceCurrency}
+                  onChange={(e) => setSourceCurrency(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="amount" className="text-base font-medium">
+                Amount
+              </Label>
+              <Input
+                id="amount"
+                placeholder="0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="developer-fee" className="text-base font-medium">
+                Developer fee
+              </Label>
+              <Input
+                id="developer-fee"
+                placeholder="0"
+                value={developerFee}
+                onChange={(e) => setDeveloperFee(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="destination-blockchain" className="text-base font-medium">
+                  Destination Blockchain
+                </Label>
+                <Input
+                  id="destination-blockchain"
+                  placeholder="Ethereum"
+                  value={destinationBlockchain}
+                  onChange={(e) => setDestinationBlockchain(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="destination-currency" className="text-base font-medium">
+                  Destination Currency
+                </Label>
+                <Input
+                  id="destination-currency"
+                  placeholder="USDC"
+                  value={destinationCurrency}
+                  onChange={(e) => setDestinationCurrency(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="wallet-address" className="text-base font-medium">
+                Wallet address
+              </Label>
+              <Input
+                id="wallet-address"
+                placeholder=""
+                value={walletAddress}
+                onChange={(e) => setWalletAddress(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={handleCancelCreate}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCreatePayment}
+                disabled={!paymentType || !customerId || !amount}
+                className="flex-1 bg-black hover:bg-gray-800 text-white"
+              >
+                Create
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
