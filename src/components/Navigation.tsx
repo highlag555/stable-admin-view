@@ -19,10 +19,11 @@ const Navigation = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
-              </div>
-              <span className="ml-2 text-xl font-semibold text-gray-900">Stables</span>
+              <img 
+                src="/lovable-uploads/023222f2-e87c-49a5-b8da-accfac2cb68e.png" 
+                alt="Stables" 
+                className="h-8 w-auto"
+              />
             </div>
             <div className="ml-10 flex space-x-8">
               {navItems.map((item) => {
