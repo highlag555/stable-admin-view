@@ -135,7 +135,7 @@ const Payments = () => {
       </div>
 
       <div className="flex justify-center items-center mt-6 space-x-2">
-        <button className="text-gray-400 text-sm">< Previous</button>
+        <button className="text-gray-400 text-sm">{'<'} Previous</button>
         {[1, 2, 3, 4, 5, 6].map((page) => (
           <button
             key={page}
@@ -146,7 +146,7 @@ const Payments = () => {
             {page}
           </button>
         ))}
-        <button className="text-gray-900 text-sm font-medium">Next ></button>
+        <button className="text-gray-900 text-sm font-medium">Next {'>'}</button>
       </div>
     </div>
   );
