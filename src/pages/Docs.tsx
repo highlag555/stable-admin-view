@@ -36,11 +36,11 @@ const Docs = () => {
           return (
             <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center mb-4">
-                <Icon className="w-8 h-8 text-blue-600 mr-3" />
+                <Icon className="w-8 h-8 mr-3" style={{ color: '#4941EC' }} />
                 <h3 className="text-xl font-semibold text-gray-900">{section.title}</h3>
               </div>
               <p className="text-gray-600 mb-4">{section.description}</p>
-              <a href={section.link} className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+              <a href={section.link} className="inline-flex items-center font-medium" style={{ color: '#4941EC' }}>
                 Learn more
                 <ExternalLink className="w-4 h-4 ml-1" />
               </a>
@@ -54,7 +54,7 @@ const Docs = () => {
         <p className="text-gray-600 mb-6">
           Can't find what you're looking for? Our support team is here to help.
         </p>
-        <button className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200">
+        <button className="inline-flex items-center px-6 py-3 text-white font-medium rounded-md transition-colors duration-200" style={{ backgroundColor: '#4941EC' }}>
           Contact Support
           <ExternalLink className="w-4 h-4 ml-2" />
         </button>
