@@ -62,7 +62,7 @@ const Customers = () => {
   };
 
   const handleCreateCustomer = () => {
-    // Create new customer object
+    // Create new customer object with identity verification task
     const newCustomer = {
       id: (customers.length + 1).toString(),
       name: customerName,
@@ -72,8 +72,8 @@ const Customers = () => {
         year: '2-digit' 
       }),
       type: customerType,
-      status: 'Active' as const,
-      tasks: null
+      status: 'Needs action' as const,
+      tasks: 1
     };
 
     // Add customer to the list
