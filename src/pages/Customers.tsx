@@ -33,7 +33,7 @@ const Customers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const customers = [
+  const [customers, setCustomers] = useState([
     { id: '1', name: 'Ya-Chen Huang', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
     { id: '2', name: 'Hakim Hettak', dateAdded: '06/02/25', type: 'Individual', status: 'Active' as const, tasks: null },
     { id: '3', name: 'Karensa Fisher', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
@@ -44,7 +44,7 @@ const Customers = () => {
     { id: '8', name: 'Wan Zulazmi', dateAdded: '06/02/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
     { id: '9', name: 'Ranjani Prasad', dateAdded: '06/01/25', type: 'Individual', status: 'Active' as const, tasks: null },
     { id: '10', name: 'Farjana Akter', dateAdded: '06/01/25', type: 'Individual', status: 'Needs action' as const, tasks: 1 },
-  ];
+  ]);
 
   const totalPages = Math.ceil(customers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -62,13 +62,22 @@ const Customers = () => {
   };
 
   const handleCreateCustomer = () => {
-    // Here you would typically save the customer data
-    console.log('Creating customer:', {
+    // Create new customer object
+    const newCustomer = {
+      id: (customers.length + 1).toString(),
       name: customerName,
-      email: customerEmail,
+      dateAdded: new Date().toLocaleDateString('en-US', { 
+        month: '2-digit', 
+        day: '2-digit', 
+        year: '2-digit' 
+      }),
       type: customerType,
-      sepaEndorsement
-    });
+      status: 'Active' as const,
+      tasks: null
+    };
+
+    // Add customer to the list
+    setCustomers(prevCustomers => [newCustomer, ...prevCustomers]);
     
     // Reset form and close modal
     setCustomerName('');
