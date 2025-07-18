@@ -2,6 +2,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Users, CreditCard, Key, UserCheck, FileText, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 const Navigation = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200">
+    <nav className="bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -42,8 +43,8 @@ const Navigation = () => {
                     to={item.path}
                     className={`inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
                       isActive
-                        ? 'text-gray-900'
-                        : 'text-gray-500 hover:text-gray-700'
+                        ? 'text-foreground'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     <Icon className="w-4 h-4 mr-2" />
@@ -54,11 +55,15 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          {/* Theme toggle and mobile menu */}
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center">
             <button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
             >
               {isMobileMenuOpen ? (
                 <X className="block h-6 w-6" />
@@ -66,6 +71,7 @@ const Navigation = () => {
                 <Menu className="block h-6 w-6" />
               )}
             </button>
+            </div>
           </div>
         </div>
       </div>
@@ -73,7 +79,7 @@ const Navigation = () => {
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+          <div className="pt-2 pb-3 space-y-1 sm:px-3 bg-background border-t border-border">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -84,8 +90,8 @@ const Navigation = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center px-3 py-2 text-base font-medium transition-colors duration-200 ${
                     isActive
-                      ? 'text-gray-900 bg-gray-50'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                      ? 'text-foreground bg-accent'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
                 >
                   <Icon className="w-5 h-5 mr-3" />
